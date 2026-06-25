@@ -3,12 +3,11 @@ class Solution {
         int ans = 0;
         int n = nums.length;
 
-
         for(int i = 0; i<n; i++){
-            int occurence = 0;
-            for(int j = i; j>=0; j--){
-                if(nums[j] == target) occurence++;
-                if(i - j + 1 < 2 * occurence) ans++;
+            int occur = 0;
+            for(int j = i; j<n; j++){
+                if(nums[j] == target) occur++;
+                if(2 * occur > j - i + 1) ans++;
             }
         }
 
