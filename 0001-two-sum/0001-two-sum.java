@@ -7,9 +7,10 @@ class Solution {
             if(map.containsKey(target - nums[i])){
                 idx1 = map.get(target - nums[i]);
                 idx2 = i;
+                return new int[]{idx1, idx2};
             }
-            else map.put(nums[i], i);
+            map.put(nums[i], i);
         }
-        return new int[]{idx1, idx2};
+        return new int[]{};
     }
 }
