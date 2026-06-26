@@ -8,7 +8,7 @@ class Solution {
                 idx1 = map.get(target - nums[i]);
                 idx2 = i;
             }
-            map.put(nums[i], i);
+            else map.put(nums[i], i);
         }
         return new int[]{idx1, idx2};
     }
