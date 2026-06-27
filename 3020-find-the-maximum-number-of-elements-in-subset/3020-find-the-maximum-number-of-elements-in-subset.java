@@ -1,27 +1,52 @@
 class Solution {
 
     public int maximumLength(int[] nums) {
-        Map<Long, Integer> cnt = new HashMap<>();
-        for (int num : nums) {
-            cnt.merge((long) num, 1, Integer::sum);
+
+        HashMap<Long, Integer> hm = new HashMap<>();
+
+        for (int x : nums) {
+            hm.put((long) x,
+                    hm.getOrDefault((long) x, 0) + 1);
         }
 
-        int oneCnt = cnt.getOrDefault(1L, 0);
-        // ans is at least the number of occurrences of 1, rounded down to an odd number
-        int ans = (oneCnt & 1) == 1 ? oneCnt : oneCnt - 1;
+        int ans = 1;
 
-        cnt.remove(1L);
+        // Special case for 1
+        if (hm.containsKey(1L)) {
 
-        for (long num : cnt.keySet()) {
-            int res = 0;
-            long x = num;
+            int cnt = hm.get(1L);
 
-            while (cnt.containsKey(x) && cnt.get(x) > 1) {
-                res += 2;
-                x *= x;
+            if (cnt % 2 == 0)
+                cnt--;
+
+            ans = Math.max(ans, cnt);
+        }
+
+        for (long start : hm.keySet()) {
+
+            if (start == 1L)
+                continue;
+
+            long x = start;
+
+            int len = 1; // middle element
+
+            while (hm.getOrDefault(x, 0) >= 2) {
+
+                long next = x * x;
+
+                if (!hm.containsKey(next))
+                    break;
+
+                len += 2;
+
+                if (x > 1e9 / x)
+                    break;
+
+                x = next;
             }
 
-            ans = Math.max(ans, res + (cnt.containsKey(x) ? 1 : -1));
+            ans = Math.max(ans, len);
         }
 
         return ans;
