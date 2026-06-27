@@ -1,54 +1,28 @@
 class Solution {
-
     public int maximumLength(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num : nums) 
+            map.put(num, map.getOrDefault(num, 0) + 1);
 
-        HashMap<Long, Integer> hm = new HashMap<>();
+        int maxLen = 0;
+        if(map.containsKey(1)) 
+            maxLen = map.get(1) - (map.get(1) % 2 == 0 ? 1 : 0);
 
-        for (int x : nums) {
-            hm.put((long) x,
-                    hm.getOrDefault((long) x, 0) + 1);
-        }
+        for(int num: nums){
+            if(num != 1){
+                int curLen = 0;
+                long curVal = (long) num;
+                while(map.containsKey((int)curVal) && map.get((int)curVal) >= 2){
+                    curLen += 2;
+                    curVal *= curVal;
+                    if(curVal > Integer.MAX_VALUE) break; 
+                }  
+                if(map.containsKey((int) curVal) && map.get((int) curVal) == 1) curLen++;
+                else curLen--;
 
-        int ans = 1;
-
-        // Special case for 1
-        if (hm.containsKey(1L)) {
-
-            int cnt = hm.get(1L);
-
-            if (cnt % 2 == 0)
-                cnt--;
-
-            ans = Math.max(ans, cnt);
-        }
-
-        for (long start : hm.keySet()) {
-
-            if (start == 1L)
-                continue;
-
-            long x = start;
-
-            int len = 1; // middle element
-
-            while (hm.getOrDefault(x, 0) >= 2) {
-
-                long next = x * x;
-
-                if (!hm.containsKey(next))
-                    break;
-
-                len += 2;
-
-                if (x > 1e9 / x)
-                    break;
-
-                x = next;
+                maxLen = Math.max(maxLen, curLen);
             }
-
-            ans = Math.max(ans, len);
         }
-
-        return ans;
+        return maxLen;
     }
 }
