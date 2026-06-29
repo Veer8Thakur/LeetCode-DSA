@@ -34,7 +34,10 @@ class Solution {
             }
             else {
                 if(len != 0) len = lps[len - 1];
-                else i++;
+                else {
+                    lps[i] = 0;
+                    i++;
+                }
             }
         } 
         return lps;
