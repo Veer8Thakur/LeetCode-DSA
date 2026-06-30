@@ -2,17 +2,13 @@ class Solution {
     public int numberOfSubstrings(String s) {
         char[] arr = s.toCharArray();
         int n = arr.length;
-        int res = 0, left = 0;
-        int[] freq = {0, 0, 0};
+        int ans = 0;
+        int lastIdx[] = {-1, -1, -1};
 
-        for(int right = 0; right<n; right++){
-            freq[arr[right] - 'a']++;
-            while(freq[0] > 0 && freq[1] > 0 && freq[2] > 0){
-                res += n - right;
-                freq[arr[left] - 'a']--;
-                left++;
-            }
+        for(int i = 0; i<n; i++){
+            lastIdx[arr[i] - 'a'] = i;
+            ans += Math.min(lastIdx[0], Math.min(lastIdx[1], lastIdx[2])) + 1;
         }
-        return res;
+        return ans;
     }
 }
