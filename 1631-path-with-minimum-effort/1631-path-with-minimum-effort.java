@@ -5,7 +5,7 @@ class Solution {
         for(int[] row: dist) Arrays.fill(row, Integer.MAX_VALUE);
         dist[0][0] = 0;
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
         // Effort, row, col
         pq.offer(new int[]{0, 0, 0});
         boolean[][] vis = new boolean[m][n];
