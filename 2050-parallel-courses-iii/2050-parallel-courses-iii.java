@@ -8,12 +8,12 @@ class Solution {
             adj.get(u).add(v);
             indegree[v]++;
         }
-        int[] deg = indegree.clone();
+        // int[] deg = indegree.clone();
 
         // TOPO SORT
         List<Integer> topo = new ArrayList<>(); // node
         Queue<Integer> q = new LinkedList<>(); // node
-        
+
         int[] dist = new int[n];
         Arrays.fill(dist, Integer.MIN_VALUE);
 
