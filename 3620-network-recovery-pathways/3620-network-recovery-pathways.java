@@ -2,36 +2,41 @@ import java.util.*;
 
 class Solution {
 
+    List<List<int[]>> adj;
+
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
 
         int n = online.length;
 
-        List<List<int[]>> adj = new ArrayList<>();
+        adj = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             adj.add(new ArrayList<>());
         }
 
         int[] indegree = new int[n];
-        List<Integer> costs = new ArrayList<>();
+        List<Integer> edgeCost = new ArrayList<>();
 
-        for (int[] e : edges) {
-            int u = e[0];
-            int v = e[1];
-            int w = e[2];
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int cost = edge[2];
 
-            adj.get(u).add(new int[]{v, w});
+            adj.get(u).add(new int[]{v, cost});
             indegree[v]++;
-            costs.add(w);
+            edgeCost.add(cost);
         }
 
-        Collections.sort(costs);
+        Collections.sort(edgeCost);
 
         List<Integer> unique = new ArrayList<>();
-        for (int x : costs) {
+        for (int x : edgeCost) {
             if (unique.isEmpty() || unique.get(unique.size() - 1) != x) {
                 unique.add(x);
             }
         }
+
+        // Compute topo order ONCE
+        List<Integer> topo = topoSort(indegree);
 
         int low = 0;
         int high = unique.size() - 1;
@@ -40,10 +45,9 @@ class Solution {
         while (low <= high) {
 
             int mid = low + (high - low) / 2;
-            int threshold = unique.get(mid);
 
-            if (check(threshold, k, online, indegree, adj, n)) {
-                ans = threshold;
+            if (check(unique.get(mid), k, online, topo, n)) {
+                ans = unique.get(mid);
                 low = mid + 1;
             } else {
                 high = mid - 1;
@@ -53,20 +57,14 @@ class Solution {
         return ans;
     }
 
-    private boolean check(int threshold,
-                          long k,
-                          boolean[] online,
-                          int[] indegree,
-                          List<List<int[]>> adj,
-                          int n) {
+    private List<Integer> topoSort(int[] indegree) {
 
-        // ---------- Topological Sort ----------
         int[] indeg = indegree.clone();
 
         Queue<Integer> q = new LinkedList<>();
         List<Integer> topo = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < indeg.length; i++) {
             if (indeg[i] == 0) {
                 q.offer(i);
             }
@@ -78,6 +76,7 @@ class Solution {
             topo.add(u);
 
             for (int[] edge : adj.get(u)) {
+
                 int v = edge[0];
 
                 indeg[v]--;
@@ -88,7 +87,15 @@ class Solution {
             }
         }
 
-        // ---------- DAG Shortest Path ----------
+        return topo;
+    }
+
+    private boolean check(int threshold,
+                          long k,
+                          boolean[] online,
+                          List<Integer> topo,
+                          int n) {
+
         long INF = Long.MAX_VALUE / 4;
 
         long[] dist = new long[n];
@@ -98,15 +105,23 @@ class Solution {
 
         for (int u : topo) {
 
-            if (dist[u] == INF) continue;
+            if (dist[u] == INF)
+                continue;
 
-            // intermediate offline nodes are not allowed
-            if (u != 0 && u != n - 1 && !online[u]) continue;
+            if (u != 0 && u != n - 1 && !online[u])
+                continue;
+
             for (int[] edge : adj.get(u)) {
+
                 int v = edge[0];
                 int cost = edge[1];
-                if (cost < threshold) continue;
-                if (v != n - 1 && !online[v]) continue;
+
+                if (cost < threshold)
+                    continue;
+
+                if (v != n - 1 && !online[v])
+                    continue;
+
                 dist[v] = Math.min(dist[v], dist[u] + cost);
             }
         }
