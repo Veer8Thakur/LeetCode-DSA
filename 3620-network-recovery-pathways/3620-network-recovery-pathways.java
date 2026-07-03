@@ -59,13 +59,13 @@ class Solution {
 
     private List<Integer> topoSort(int[] indegree) {
 
-        int[] indeg = indegree.clone();
+        // int[] indeg = indegree.clone();
 
         Queue<Integer> q = new LinkedList<>();
         List<Integer> topo = new ArrayList<>();
 
-        for (int i = 0; i < indeg.length; i++) {
-            if (indeg[i] == 0) {
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) {
                 q.offer(i);
             }
         }
@@ -79,9 +79,9 @@ class Solution {
 
                 int v = edge[0];
 
-                indeg[v]--;
+                indegree[v]--;
 
-                if (indeg[v] == 0) {
+                if (indegree[v] == 0) {
                     q.offer(v);
                 }
             }
