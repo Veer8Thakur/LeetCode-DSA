@@ -14,13 +14,13 @@ class Solution {
         if(rank[rootX] > rank[rootY]){
             parent[rootY] = rootX;
         }
-        else if(rank[rootX] < rank[rootY]){
+        else if(rank[rootX] <= rank[rootY]){
             parent[rootX] = rootY;
         }
-        else {
-            parent[rootY] = rootX;
-            rank[rootX]++;
-        }
+        // else {
+        //     parent[rootY] = rootX;
+        //     rank[rootX]++;
+        // }
     }
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
