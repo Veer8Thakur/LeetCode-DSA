@@ -1,29 +1,65 @@
 class Solution {
-    int minScore;
-    List<List<int[]>> adj;
-    public int minScore(int n, int[][] roads) {
-        minScore = Integer.MAX_VALUE;
-        adj = new ArrayList<>();
-        for(int i = 0; i<=n; i++) adj.add(new ArrayList<>());
-        for(int road[] : roads){
-            int u = road[0], v = road[1], w = road[2];
-            adj.get(u).add(new int[]{v, w});
-            adj.get(v).add(new int[]{u, w});
-        }
-        boolean vis[] = new boolean[n+1];
 
-        DFS(vis, 1);
-        
+    int[] parent;
+    int[] rank;
+
+    public int minScore(int n, int[][] roads) {
+        parent = new int[n + 1];
+        rank = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            parent[i] = i;
+        }
+
+        // Step 1: Build connected components
+        for (int[] road : roads) {
+            int u = road[0];
+            int v = road[1];
+
+            union(u, v);
+        }
+
+        // Step 2: Component containing city 1
+        int root = find(1);
+
+        int minScore = Integer.MAX_VALUE;
+
+        // Step 3: Find minimum edge in that component
+        for (int[] road : roads) {
+            int u = road[0];
+            int weight = road[2];
+
+            if (find(u) == root) {
+                minScore = Math.min(minScore, weight);
+            }
+        }
+
         return minScore;
     }
-    public void DFS(boolean[] vis, int node){
-        vis[node] = true;
-        for(int[] road: adj.get(node)){
-            int nei = road[0], cost = road[1];
-            minScore = Math.min(minScore, cost);
-            if(!vis[nei]){
-                DFS(vis, nei);
-            }
+
+    private int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+
+        return parent[x];
+    }
+
+    private void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+
+        if (rootX == rootY) {
+            return;
+        }
+
+        if (rank[rootX] < rank[rootY]) {
+            parent[rootX] = rootY;
+        } else if (rank[rootX] > rank[rootY]) {
+            parent[rootY] = rootX;
+        } else {
+            parent[rootY] = rootX;
+            rank[rootX]++;
         }
     }
 }
