@@ -1,44 +1,28 @@
 class Solution {
+    int minScore = Integer.MAX_VALUE; 
+    List<List<int[]>> adj;
     public int minScore(int n, int[][] roads) {
-        List<List<int[]>> adj = new ArrayList<>();
-
-        for (int i = 0; i <= n; i++) {
-            adj.add(new ArrayList<>());
+        adj = new ArrayList<>();
+        for(int i = 0; i<=n; i++) adj.add(new ArrayList<>());
+        for(int road[] : roads){
+            int u = road[0], v = road[1], w = road[2];
+            adj.get(u).add(new int[]{v, w});
+            adj.get(v).add(new int[]{u, w});
         }
-
-        for (int[] road : roads) {
-            int u = road[0];
-            int v = road[1];
-            int wt = road[2];
-
-            adj.get(u).add(new int[]{v, wt});
-            adj.get(v).add(new int[]{u, wt});
-        }
-
-        boolean[] visited = new boolean[n + 1];
-        Queue<Integer> queue = new LinkedList<>();
-
-        queue.offer(1);
-        visited[1] = true;
-
-        int minScore = Integer.MAX_VALUE;
-
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-
-            for (int[] edge : adj.get(node)) {
-                int next = edge[0];
-                int wt = edge[1];
-
-                minScore = Math.min(minScore, wt);
-
-                if (!visited[next]) {
-                    visited[next] = true;
-                    queue.offer(next);
-                }
+        boolean vis[] = new boolean[n+1];
+        
+        DFS(vis, 1);
+        
+        return minScore;
+    }
+    public void DFS(boolean[] vis, int node){
+        vis[node] = true;
+        for(int[] road: adj.get(node)){
+            int nei = road[0], cost = road[1];
+            minScore = Math.min(minScore, cost);
+            if(!vis[nei]){
+                DFS(vis, nei);
             }
         }
-
-        return minScore;
     }
 }
