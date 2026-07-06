@@ -1,18 +1,16 @@
 class StockSpanner {
-    List<Integer> seq; 
+    Deque<int[]> dq;
     public StockSpanner() {
-        seq = new ArrayList<>();
+        dq = new ArrayDeque<>();
     }
     
     public int next(int price) {
-        // if(list.size() == 0) return null;
-        int cnt = 1;
-        for(int i = seq.size()-1; i>=0; i--){
-            if(seq.get(i) <= price) cnt++;
-            else break;
+        int span = 1;
+        while(!dq.isEmpty() && dq.peekLast()[0] <= price){
+            span += dq.removeLast()[1];
         }
-        seq.add(price);
-        return cnt;
+        dq.addLast(new int[]{price, span});
+        return span;
     }
 }
 
