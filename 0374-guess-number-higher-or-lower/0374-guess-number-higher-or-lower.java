@@ -9,7 +9,9 @@
 
 public class Solution extends GuessGame {
     public int guessNumber(int n) {
-        int low = 1, high = Integer.MAX_VALUE;
+        // TC: log(n) + O(guess)    SC: O(1);
+
+        int low = 1, high = n;
 
         while(low <= high){
             int mid = low + (high - low)/2; 
