@@ -3,7 +3,6 @@ class Solution {
         int low = 1, high = Integer.MIN_VALUE;
         for(int pile : piles){
             high = Math.max(high, pile);
-            
         }
         int ans = 0;
         while(low <= high){
@@ -22,6 +21,6 @@ class Solution {
             time += ((long)pile + curCap - 1)/curCap; // ceil division
             if(time > h) return false;
         }
-        return time <= h;
+        return true;
     }
 }
