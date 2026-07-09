@@ -4,7 +4,7 @@ class Solution {
 
     public int find(int x){
         if(parent[x] != x){
-            x = find(parent[x]);
+            parent[x] = find(parent[x]);
         }
         return parent[x];
     }
