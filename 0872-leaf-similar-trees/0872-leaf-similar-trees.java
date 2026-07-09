@@ -25,10 +25,9 @@ class Solution {
         if(node == null) return ;
         if(node.left == null && node.right == null) {
             leaves.add(node.val);
-            return ;
+            // return ;
         }
         DFS(node.left, leaves);
         DFS(node.right, leaves);
-        
     }
 }
