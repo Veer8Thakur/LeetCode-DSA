@@ -1,176 +1,81 @@
-import java.util.*;
-
 class Solution {
-    public int[] pathExistenceQueries(
-        int n,
-        int[] nums,
-        int maxDiff,
-        int[][] queries
-    ) {
-        
-        // 1. Store {value, originalIndex}
-        int[][] pair = new int[n][2];
-
-        for (int i = 0; i < n; i++) {
-            pair[i][0] = nums[i];
-            pair[i][1] = i;
+    public int[] pathExistenceQueries(int n, int[] nums, int maxDiff, int[][] queries) {
+        int[][] pairs = new int[n][2];
+        for(int i = 0; i<n; i++){
+            pairs[i][0] = nums[i];
+            pairs[i][1] = i;
         }
-
-        // 2. Sort nodes according to nums value
-        Arrays.sort(pair, (a, b) ->
-            Integer.compare(a[0], b[0])
-        );
-
+        Arrays.sort(pairs, (a, b) -> Integer.compare(a[0], b[0]));
+        int[] pos = new int[n];
         int[] arr = new int[n];
 
-        // pos[originalIndex] = sortedPosition
-        int[] pos = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            arr[i] = pair[i][0];
-
-            int originalIndex = pair[i][1];
-            pos[originalIndex] = i;
+        for(int i = 0; i<n; i++){
+            arr[i] = pairs[i][0];
+            int ogIdx = pairs[i][1];
+            pos[ogIdx] = i;
         }
 
-
-        // ------------------------------------------------
-        // 3. Find farthest right reachable in ONE edge
-        // ------------------------------------------------
-
+        // farthest range
         int[] farthest = new int[n];
-
         int r = 0;
-
-        for (int l = 0; l < n; l++) {
-
-            r = Math.max(r, l);
-
-            while (
-                r + 1 < n &&
-                arr[r + 1] - arr[l] <= maxDiff
-            ) {
-                r++;
-            }
-
+        for(int l = 0; l<n; l++){
+            r = Math.max(l, r);
+            while(r + 1 < n && arr[r+1] - arr[l] <= maxDiff) r++;
             farthest[l] = r;
         }
 
-
-        // ------------------------------------------------
-        // 4. Build connected component IDs
-        // ------------------------------------------------
-
-        int[] component = new int[n];
-
+        // Components
         int componentId = 0;
-
-        for (int i = 1; i < n; i++) {
-
-            if (arr[i] - arr[i - 1] > maxDiff) {
-                componentId++;
-            }
-
-            component[i] = componentId;
+        int[] component = new int[n];
+        for(int i = 1; i<n; i++){
+            if(arr[i] - arr[i-1] > maxDiff) componentId++;
+            component[i] = componentId; 
         }
 
-
-        // ------------------------------------------------
-        // 5. Binary lifting table
-        // ------------------------------------------------
-
+        // Binary range
         int LOG = 1;
+        while((1 << LOG) < n) LOG++;
 
-        while ((1L << LOG) <= n) {
-            LOG++;
-        }
-
+        // Binary Lifting Table
         int[][] up = new int[n][LOG];
+        for(int i = 0; i<n; i++) up[i][0] = farthest[i];
 
-
-        // 1 jump
-        for (int i = 0; i < n; i++) {
-            up[i][0] = farthest[i];
-        }
-
-
-        // 2, 4, 8, 16... jumps
-        for (int k = 1; k < LOG; k++) {
-
-            for (int i = 0; i < n; i++) {
-
-                int mid = up[i][k - 1];
-
-                up[i][k] = up[mid][k - 1];
+        for(int k = 1; k<LOG; k++){
+            for(int i = 0; i<n; i++){
+                up[i][k] = up[up[i][k-1]][k-1];
             }
         }
 
+        int m = queries.length; 
+        int[] ans = new int[m];
+        for(int i = 0; i<m; i++){
+            int u = queries[i][0];
+            int v = queries[i][1];
 
-        // ------------------------------------------------
-        // 6. Answer queries
-        // ------------------------------------------------
-
-        int q = queries.length;
-        int[] answer = new int[q];
-
-        for (int qi = 0; qi < q; qi++) {
-
-            int u = queries[qi][0];
-            int v = queries[qi][1];
-
-
-            // Convert original index → sorted position
-            int left = pos[u];
-            int right = pos[v];
-
-
-            // Ensure left <= right
-            if (left > right) {
-                int temp = left;
-                left = right;
-                right = temp;
+            int start = pos[u], end = pos[v];
+            if(start > end){
+                int temp = start;
+                start = end;
+                end = temp;
             }
-
-
-            // Same node
-            if (left == right) {
-                answer[qi] = 0;
+            if(start == end) {
+                ans[i] = 0;
                 continue;
             }
-
-
-            // Different connected components
-            if (component[left] != component[right]) {
-                answer[qi] = -1;
+            if(component[start] != component[end]){
+                ans[i] = -1;
                 continue;
             }
-
-
-            // --------------------------------------------
-            // Binary lifting query
-            // --------------------------------------------
-
-            int current = left;
+            int cur = start;
             int jumps = 0;
-
-
-            // Take largest possible jumps
-            // while remaining strictly before target
-            for (int k = LOG - 1; k >= 0; k--) {
-
-                if (up[current][k] < right) {
-
-                    current = up[current][k];
-
+            for(int k = LOG-1; k>=0; k--){
+                if(up[cur][k] < end){
+                    cur = up[cur][k];
                     jumps += (1 << k);
                 }
             }
-
-
-            // One final jump reaches/crosses target
-            answer[qi] = jumps + 1;
+            ans[i] = jumps + 1;
         }
-
-        return answer;
+        return ans;
     }
 }
