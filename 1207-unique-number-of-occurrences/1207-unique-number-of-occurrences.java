@@ -9,9 +9,13 @@ class Solution {
         //     if(set.contains(num.getValue())) return false;
         //     set.add(num.getValue());
         // }
-        for(var entry: map.entrySet()){
-            if(set.contains(entry.getValue())) return false;
-            set.add(entry.getValue());
+        // for(var entry: map.entrySet()){
+        //     if(set.contains(entry.getValue())) return false;
+        //     set.add(entry.getValue());
+        // }
+        for(Integer entry: map.values()){
+            if(set.contains(entry)) return false;
+            set.add(entry);
         }
         return true;
     }
