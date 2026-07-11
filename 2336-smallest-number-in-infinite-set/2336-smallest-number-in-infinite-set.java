@@ -1,25 +1,26 @@
 class SmallestInfiniteSet {
-    PriorityQueue<Integer> pq;
-    int counter;
+    private PriorityQueue<Integer> pq;
+    private HashSet<Integer> set;
+    private int counter;
+
     public SmallestInfiniteSet() {
         pq = new PriorityQueue<>();
+        set = new HashSet<>();
         counter = 1;
     }
-    
+
     public int popSmallest() {
-        if(!pq.isEmpty() && pq.peek() < counter) return pq.poll();
+        if (!pq.isEmpty()) {
+            int smallest = pq.poll();
+            set.remove(smallest);
+            return smallest;
+        }
         return counter++;
-        
     }
-    
+
     public void addBack(int num) {
-        if(!pq.contains(num) && counter > num) pq.add(num);
+        if (num < counter && set.add(num)) {
+            pq.offer(num);
+        }
     }
 }
-
-/**
- * Your SmallestInfiniteSet object will be instantiated and called as such:
- * SmallestInfiniteSet obj = new SmallestInfiniteSet();
- * int param_1 = obj.popSmallest();
- * obj.addBack(num);
- */
