@@ -12,12 +12,15 @@ class Solution {
                 int k = 0;
                 StringBuilder digit = new StringBuilder(); 
                 while(!stk.isEmpty() && Character.isDigit(stk.peek())){
-                    // k = k * 10 + (stk.pop() - '0');
                     digit.append(stk.pop());
                     digit.reverse();
                 }
-                String str = new String(digit);
-                k = Integer.parseInt(str);
+                for(int i = 0; i<digit.length(); i++){
+                    int num = digit.charAt(i) - '0';
+                    k = k * 10 + num;
+                }
+                // String str = new String(digit);
+                // k = Integer.parseInt(str);
                 for(int j = 0; j<k; j++)
                     for(int i = 0; i<sb.length(); i++) stk.push(sb.charAt(i));
             }
