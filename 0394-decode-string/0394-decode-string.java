@@ -17,7 +17,7 @@ class Solution {
                 }
                 String str = new String(digit);
                 k = Integer.parseInt(str);
-                while(k-->0)
+                for(int j = 0; j<k; j++)
                     for(int i = 0; i<sb.length(); i++) stk.push(sb.charAt(i));
             }
             else stk.push(c);
