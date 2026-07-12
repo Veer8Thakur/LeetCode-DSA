@@ -13,8 +13,8 @@ class Solution {
                 StringBuilder digit = new StringBuilder(); 
                 while(!stk.isEmpty() && Character.isDigit(stk.peek())){
                     digit.append(stk.pop());
-                    digit.reverse();
                 }
+                digit.reverse();
                 String str = new String(digit);
                 k = Integer.parseInt(str);
                 for(int j = 0; j<k; j++)
