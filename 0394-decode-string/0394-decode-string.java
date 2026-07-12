@@ -15,13 +15,9 @@ class Solution {
                     digit.append(stk.pop());
                     digit.reverse();
                 }
-                for(int i = 0; i<digit.length(); i++){
-                    int num = digit.charAt(i) - '0';
-                    k = k * 10 + num;
-                }
-                // String str = new String(digit);
-                // k = Integer.parseInt(str);
-                for(int j = 0; j<k; j++)
+                String str = new String(digit);
+                k = Integer.parseInt(str);
+                while(k-->0)
                     for(int i = 0; i<sb.length(); i++) stk.push(sb.charAt(i));
             }
             else stk.push(c);
