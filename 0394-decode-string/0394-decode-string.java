@@ -15,8 +15,7 @@ class Solution {
                     digit.append(stk.pop());
                 }
                 digit.reverse();
-                String str = new String(digit);
-                k = Integer.parseInt(str);
+                k = Integer.parseInt(digit.toString());
                 for(int j = 0; j<k; j++)
                     for(int i = 0; i<sb.length(); i++) stk.push(sb.charAt(i));
             }
