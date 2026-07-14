@@ -17,7 +17,7 @@ class Solution {
                 end = newEnd;
             }
         }
-
-        return arrows+1;
+        arrows++; // +1 for last interval
+        return arrows;
     }
 }
