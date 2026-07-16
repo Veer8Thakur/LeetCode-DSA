@@ -15,7 +15,7 @@ class Solution {
         int left = 0, right = n-1;
         long sum = 0;
         while(left < right){
-            sum += (long) GCD(arr[right--], arr[left++]);
+            sum +=  GCD(arr[right--], arr[left++]);
         }
         return sum;
     }
