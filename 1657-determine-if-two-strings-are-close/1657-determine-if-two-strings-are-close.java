@@ -13,7 +13,7 @@ class Solution {
             if ((freq1[i] == 0) != (freq2[i] == 0)) {
                 return false;
             }
-}
+        }
 
         Arrays.sort(freq1);
         Arrays.sort(freq2);
