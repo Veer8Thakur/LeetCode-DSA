@@ -15,18 +15,18 @@
 */
 
 class Solution {
-    int cnt = 0;
+   
     public int goodNodes(TreeNode root) {
         return DFS(root, Integer.MIN_VALUE);
     }
     public int DFS(TreeNode node, int maxVal){
         if(node == null) return 0;
-        // int cnt = 0;
+        int cnt = 0;
         if(maxVal <= node.val) cnt++;
         maxVal = Math.max(maxVal, node.val);
 
-        DFS(node.left, maxVal);
-        DFS(node.right, maxVal);
+        cnt += DFS(node.left, maxVal);
+        cnt += DFS(node.right, maxVal);
 
         return cnt;
     }
