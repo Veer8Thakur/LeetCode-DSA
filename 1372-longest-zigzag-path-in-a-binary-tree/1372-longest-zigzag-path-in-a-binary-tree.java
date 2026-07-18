@@ -16,29 +16,22 @@
 class Solution {
     int max = 0;
     public int longestZigZag(TreeNode root) {
-        if (root == null) return 0;
-        dfs(root.left, true, 1);   // First move is to the left
-        dfs(root.right, false, 1); // First move is to the right
+        if(root == null) return 0;
+        DFS(root.left, true, 1);
+        DFS(root.right, false, 1);
         return max;
     }
+    public void DFS(TreeNode node, boolean cameFrom, int len){
+        if(node == null) return ;
 
-    private void dfs(TreeNode node, boolean cameFromLeft, int length) {
-        if (node == null) return;
-
-        max = Math.max(max, length);
-
-        if (cameFromLeft) {
-            // Continue ZigZag by going right
-            dfs(node.right, false, length + 1);
-
-            // Restart from left child
-            dfs(node.left, true, 1);
-        } else {
-            // Continue ZigZag by going left
-            dfs(node.left, true, length + 1);
-
-            // Restart from right child
-            dfs(node.right, false, 1);
+        max = Math.max(max, len);
+        if(cameFrom){
+            DFS(node.right, false, len+1);
+            DFS(node.left, true, 1);
+        }
+        else {
+            DFS(node.left, true, len+1);
+            DFS(node.right, false, 1);
         }
     }
 }
