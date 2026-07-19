@@ -15,7 +15,7 @@ class Solution {
         for(int i = 0; i<n; i++){
             char c = arr[i];
             if(vis[c - 'a']) continue;
-            while(!dq.isEmpty() && dq.peekLast() > c && lastIdx[dq.peekLast() - 'a'] > i){
+            while(!dq.isEmpty() && dq.peekLast()-'a' > c-'a' && lastIdx[dq.peekLast() - 'a'] > i){
                 char peek = dq.pollLast();
                 vis[peek - 'a'] = false;
             }
