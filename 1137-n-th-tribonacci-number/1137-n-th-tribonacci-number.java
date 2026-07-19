@@ -5,10 +5,10 @@ class Solution {
         int zero = 0, one = 1, two = 1;
 
         for(int i = 3; i<=n; i++){
-            int ans = zero + one + two;
+            int temp = zero + one + two;
             zero = one;
             one = two;
-            two = ans;
+            two = temp;
         }
         return two;
     }
