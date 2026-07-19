@@ -10,7 +10,7 @@ class Solution {
         while(!q.isEmpty()){
             int cur[] = q.poll();
             int r = cur[0], c = cur[1], steps = cur[2];
-            vis[r][c] = true;
+            
             if((r != entrance[0] || c != entrance[1]) && (r == 0 || r == m-1 || c == 0 || c == n-1)) return steps;
 
             for(int[] dir: directions){
