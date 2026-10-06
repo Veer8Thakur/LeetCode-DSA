@@ -1,5 +1,4 @@
 class Solution {
-
     public int minAddToMakeValid(String s) {
         int openBrackets = 0;
         int minAddsRequired = 0;
