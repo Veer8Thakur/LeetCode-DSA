@@ -1,5 +1,4 @@
 class Solution {
-
     public int minInsertions(String s) {
         int insertions = 0;
         int leftCount = 0;
