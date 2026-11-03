@@ -6,8 +6,9 @@ class Solution {
 
         int ops = 0;
         for(int num: nums){
-            ops += Math.abs(max - num);
+            ops += max - num;
         }
+
         return ops;
     }
 }
