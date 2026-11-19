@@ -1,7 +1,7 @@
 class Solution {
     public int minChanges(String s) {
         int n = s.length();
-        char[] ch = s.toCharArray();
+        // char[] ch = s.toCharArray();
         int left = 0, right = 1;
         int ops = 0;
 
