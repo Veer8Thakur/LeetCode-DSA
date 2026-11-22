@@ -42,6 +42,7 @@ class Solution {
         }
         last[c] = prev;
     } 
+    
     public int postOrder(int node){
         int size = 1;
         for(int child: newTree[node]){
