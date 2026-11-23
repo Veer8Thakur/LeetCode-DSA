@@ -5,13 +5,14 @@ class ProductOfNumbers {
     }
     
     public void add(int num) {
-        list.addFirst(num);
+        list.add(num);
     }
     
     public int getProduct(int k) {
-        int product = list.get(0);
-        for(int i = 1; i<k; i++){
-            product *= list.get(i);
+        int size = list.size() - 1;
+        int product = 1;
+        for(int i = 0; i<k; i++){
+            product *= list.get(size - i);
         }
         return product;
     }
