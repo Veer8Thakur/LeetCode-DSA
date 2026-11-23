@@ -5,12 +5,13 @@ class ProductOfNumbers {
     }
     
     public void add(int num) {
+        if(num == 0) {
+            prefixSum.clear();
+            return ;
+        }
         if(prefixSum.size() == 0) prefixSum.add(num);
         else prefixSum.add(prefixSum.get(prefixSum.size()-1) * num);
 
-        if(num == 0) {
-            prefixSum.clear();
-        }
     }
     
     public int getProduct(int k) {
