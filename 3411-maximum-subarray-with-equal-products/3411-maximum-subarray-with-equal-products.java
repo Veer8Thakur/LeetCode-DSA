@@ -20,8 +20,15 @@ class Solution {
     }
 
     public int GCD(int a, int b){
-        if(b == 0) return a;
-        return GCD(b, a%b);
+        // if(b == 0) return a;
+        // return GCD(b, a%b);
+        while(b != 0){
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+
     }
 
     public int LCM(int a, int b){
