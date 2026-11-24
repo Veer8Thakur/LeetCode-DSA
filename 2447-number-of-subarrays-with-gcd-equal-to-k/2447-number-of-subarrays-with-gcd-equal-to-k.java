@@ -7,6 +7,7 @@ class Solution {
             for(int j = i; j<n; j++){
                 curGCD = GCD(curGCD, nums[j]);
                 if(curGCD == k) ans++;
+                else if(curGCD < k) break;
             }
         }
         return ans;
