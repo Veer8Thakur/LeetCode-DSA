@@ -11,9 +11,9 @@ class Solution {
                 prod *= nums[j];
                 curLCM = LCM(curLCM, nums[j]);
                 curGCD = GCD(curGCD, nums[j]);
-            if(prod == curLCM * curGCD) {
-                max = Math.max(max, j - i + 1);
-            }
+                if(prod == curLCM * curGCD) {
+                    max = Math.max(max, j - i + 1);
+                }
             }
         }
         return max;
