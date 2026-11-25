@@ -1,48 +1,62 @@
 class Solution {
 
     public int smallestUniqueSubarray(int[] nums) {
-        final long MOD = 1000000007L;
-        final long BASE = 911382323L;
 
-        int n = nums.length;
-        long[] h = new long[n + 1];
-        long[] p = new long[n + 1];
-        p[0] = 1;
+        int low = 1;
+        int high = nums.length;
+        int ans = nums.length;
 
-        // Compute prefix hashes and powers of BASE
-        for (int i = 0; i < n; ++i) {
-            h[i + 1] = (h[i] * BASE + nums[i]) % MOD;
-            p[i + 1] = (p[i] * BASE) % MOD;
-        }
+        while (low <= high) {
 
-        int lo = 1,
-            hi = n;
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (check(mid, n, h, p, MOD)) {
-                hi = mid;
+            int mid = low + (high - low) / 2;
+
+            if (check(nums, mid)) {
+                ans = mid;
+                high = mid - 1;
             } else {
-                lo = mid + 1;
+                low = mid + 1;
             }
         }
 
-        return lo;
+        return ans;
     }
 
-    private boolean check(int len, int n, long[] h, long[] p, long MOD) {
-        Map<Long, Integer> cnt = new HashMap<>();
+    private boolean check(int[] nums, int len) {
 
-        for (int l = 0; l + len <= n; ++l) {
-            int r = l + len;
-            long key = (h[r] - ((h[l] * p[len]) % MOD) + MOD) % MOD;
-            cnt.merge(key, 1, Integer::sum);
+        long BASE = 100001;
+        long MOD = 1_000_000_007;
+
+        int n = nums.length;
+
+        long power = 1;
+
+        for (int i = 1; i < len; i++) {
+            power = (power * BASE) % MOD;
         }
 
-        for (int times : cnt.values()) {
-            if (times == 1) {
-                return true;
-            }
+        long hash = 0;
+
+        for (int i = 0; i < len; i++) {
+            hash = (hash * BASE + nums[i]) % MOD;
         }
+
+        Map<Long, Integer> freq = new HashMap<>();
+
+        freq.put(hash, 1);
+
+        for (int i = len; i < n; i++) {
+
+            hash = (hash - nums[i - len] * power % MOD + MOD) % MOD;
+
+            hash = (hash * BASE + nums[i]) % MOD;
+
+            freq.put(hash, freq.getOrDefault(hash, 0) + 1);
+        }
+
+        for (int count : freq.values()) {
+            if (count == 1) return true;
+        }
+
         return false;
     }
 }
