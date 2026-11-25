@@ -1,48 +1,80 @@
 class Solution {
 
+    static final long BASE = 100001L;
+    static final long MOD1 = 1_000_000_007L;
+    static final long MOD2 = 1_000_000_009L;
+
     public int smallestUniqueSubarray(int[] nums) {
-        final long MOD = 1000000007L;
-        final long BASE = 911382323L;
 
-        int n = nums.length;
-        long[] h = new long[n + 1];
-        long[] p = new long[n + 1];
-        p[0] = 1;
+        int low = 1;
+        int high = nums.length;
+        int ans = nums.length;
 
-        // Compute prefix hashes and powers of BASE
-        for (int i = 0; i < n; ++i) {
-            h[i + 1] = (h[i] * BASE + nums[i]) % MOD;
-            p[i + 1] = (p[i] * BASE) % MOD;
-        }
+        while (low <= high) {
 
-        int lo = 1,
-            hi = n;
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (check(mid, n, h, p, MOD)) {
-                hi = mid;
+            int mid = low + (high - low) / 2;
+
+            if (check(nums, mid)) {
+                ans = mid;
+                high = mid - 1;
             } else {
-                lo = mid + 1;
+                low = mid + 1;
             }
         }
 
-        return lo;
+        return ans;
     }
 
-    private boolean check(int len, int n, long[] h, long[] p, long MOD) {
-        Map<Long, Integer> cnt = new HashMap<>();
+    private boolean check(int[] nums, int len) {
 
-        for (int l = 0; l + len <= n; ++l) {
-            int r = l + len;
-            long key = (h[r] - ((h[l] * p[len]) % MOD) + MOD) % MOD;
-            cnt.merge(key, 1, Integer::sum);
+        int n = nums.length;
+
+        long power1 = 1;
+        long power2 = 1;
+
+        // Calculate BASE^(len-1)
+        for (int i = 1; i < len; i++) {
+            power1 = (power1 * BASE) % MOD1;
+            power2 = (power2 * BASE) % MOD2;
         }
 
-        for (int times : cnt.values()) {
-            if (times == 1) {
+        // Calculate hash of first window
+        long hash1 = 0;
+        long hash2 = 0;
+
+        for (int i = 0; i < len; i++) {
+
+            hash1 = (hash1 * BASE + nums[i]) % MOD1;
+            hash2 = (hash2 * BASE + nums[i]) % MOD2;
+        }
+
+        Map<String, Integer> freq = new HashMap<>();
+
+        freq.put(hash1 + "#" + hash2, 1);
+
+        // Sliding window
+        for (int i = len; i < n; i++) {
+
+            // Remove outgoing element
+            hash1 = (hash1 - (nums[i - len] * power1) % MOD1 + MOD1) % MOD1;
+            hash2 = (hash2 - (nums[i - len] * power2) % MOD2 + MOD2) % MOD2;
+
+            // Add incoming element
+            hash1 = (hash1 * BASE + nums[i]) % MOD1;
+            hash2 = (hash2 * BASE + nums[i]) % MOD2;
+
+            String key = hash1 + "#" + hash2;
+
+            freq.put(key, freq.getOrDefault(key, 0) + 1);
+        }
+
+        // Check if any window is unique
+        for (int count : freq.values()) {
+            if (count == 1) {
                 return true;
             }
         }
+
         return false;
     }
 }
