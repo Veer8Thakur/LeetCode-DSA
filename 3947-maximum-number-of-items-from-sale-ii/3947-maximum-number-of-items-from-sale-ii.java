@@ -1,5 +1,4 @@
 class Solution {
-
     public int maximumSaleItems(int[][] items, int budget) {
         Arrays.sort(items, (a, b) -> Integer.compare(a[1], b[1]));
         int mx = 0;
